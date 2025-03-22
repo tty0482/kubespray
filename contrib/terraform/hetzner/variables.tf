@@ -54,3 +54,13 @@ variable "ingress_whitelist" {
 variable "inventory_file" {
   description = "Where to store the generated inventory file"
 }
+
+variable "distro" {
+  description = "Which distro to use"
+  default     = "ubuntu"
+
+  validation {
+    condition     = contains(["ubuntu", "flatcar"], var.distro)
+    error_message = "Allowed values for distro are \"ubuntu\" and \"flatcar\"."
+  }
+}

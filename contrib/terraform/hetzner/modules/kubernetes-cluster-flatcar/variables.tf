@@ -55,6 +55,11 @@ variable "private_network_cidr" {
 variable "private_subnet_cidr" {
   default = "10.0.10.0/24"
 }
+
 variable "network_zone" {
   default = "eu-central"
+}
+
+variable "inventory_file" {
+  description = "Where to store the generated inventory file"
 }
