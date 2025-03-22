@@ -120,3 +120,28 @@ resource "hcloud_firewall" "worker" {
     source_ips = var.nodeport_whitelist
   }
 }
+
+module "inventory" {
+  source = "../inventory"
+
+  master_ip_addresses = {
+    for key, instance in hcloud_server.master :
+    instance.name => {
+      "private_ip" = hcloud_server_network.master[key].ip
+      "public_ip"  = hcloud_server.master[key].ipv4_address
+    }
+  }
+
+  worker_ip_addresses = {
+    for key, instance in hcloud_server.worker :
+    instance.name => {
+      "private_ip" = hcloud_server_network.worker[key].ip
+      "public_ip"  = hcloud_server.worker[key].ipv4_address
+    }
+  }
+
+  network_id     = hcloud_network.kubernetes.id
+  username       = "ubuntu"
+  inventory_file = var.inventory_file
+}
+

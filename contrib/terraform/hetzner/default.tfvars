@@ -2,6 +2,7 @@ prefix         = "default"
 zone           = "hel1"
 network_zone   = "eu-central"
 inventory_file = "inventory.ini"
+distro         = "ubuntu"
 
 ssh_public_keys = [
   # Put your public SSH key here

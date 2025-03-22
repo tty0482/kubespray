@@ -56,17 +56,9 @@ cd inventory/$CLUSTER
 
 Edit `default.tfvars` to match your requirement.
 
-Flatcar Container Linux instead of the basic Hetzner Images.
-
-```bash
-cd ../../contrib/terraform/hetzner
-```
-
-Edit `main.tf` and reactivate the module `source = "./modules/kubernetes-cluster-flatcar"`and
-comment out the `#source = "./modules/kubernetes-cluster"`.
-
-activate `ssh_private_key_path = var.ssh_private_key_path`. The VM boots into
-Rescue-Mode with the selected image of the `var.machines` but installs Flatcar instead.
+To use Flatcar Container Linux instead of the basic Hetzner Images, simply set the distro var to "flatcar".
+You must also configure ssh_private_key_path to point at the private key matching the configured public key.
+The VM boots into Rescue-Mode with the selected image of the `var.machines` but installs Flatcar instead.
 
 Run Terraform to create the infrastructure.
 
@@ -84,6 +76,8 @@ It is a good idea to check that you have basic SSH connectivity to the nodes. Yo
 ```bash
 ansible -i inventory.ini -m ping all
 ```
+
+This will be unable to find python on the machines, but should be able to connect.
 
 You can setup Kubernetes with kubespray using the generated inventory:
 

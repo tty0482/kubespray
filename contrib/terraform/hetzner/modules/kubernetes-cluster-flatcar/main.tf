@@ -142,3 +142,30 @@ resource "hcloud_firewall" "worker" {
     source_ips = var.nodeport_whitelist
   }
 }
+
+module "inventory" {
+  source = "../inventory"
+
+  master_ip_addresses = {
+    for name, machine in var.machines :
+      name => {
+        "private_ip" = hcloud_server_network.machine[name].ip
+        "public_ip"  = hcloud_server.machine[name].ipv4_address
+      }
+      if machine.node_type == "master"
+  }
+
+
+  worker_ip_addresses = {
+    for name, machine in var.machines :
+      name => {
+        "private_ip" = hcloud_server_network.machine[name].ip
+        "public_ip"  = hcloud_server.machine[name].ipv4_address
+      }
+      if machine.node_type == "worker"
+  }
+
+  network_id     = hcloud_network.kubernetes.id
+  username       = var.user_flatcar
+  inventory_file = var.inventory_file
+}
